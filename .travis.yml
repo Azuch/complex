@@ -3,18 +3,18 @@ services:
   - docker
 
 before_install:
-  - docker build -t azuch/client-test -f ./client/Dockerfile.dev ./client
+  - docker build -t bry765/client-test -f ./client/Dockerfile.dev ./client
 
 scripts:
-  - docker run -e CI=true azuch/client-test npm test
+  - docker run -e CI=true bry765/client-test npm test
 
 after_success:
-  - docker build -t azuch/client ./client
-  - docker build -t azuch/worker ./worker
-  - docker build -t azuch/nginx ./nginx
-  - docker build -t azuch/server ./server
+  - docker build -t bry765/client ./client
+  - docker build -t bry765/worker ./worker
+  - docker build -t bry765/nginx ./nginx
+  - docker build -t bry765/server ./server
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push azuch/client
-  - docker push azuch/server
-  - docker push azuch/worker
-  - docker push azuch/nginx
+  - docker push bry765/client
+  - docker push bry765/server
+  - docker push bry765/worker
+  - docker push bry765/nginx

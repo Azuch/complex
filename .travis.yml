@@ -18,3 +18,16 @@ after_success:
   - docker push bry765/server
   - docker push bry765/worker
   - docker push bry765/nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-southeast-1"
+  app: "Complex"
+  env: "Complex-env"
+  bucket_name: "elasticbeanstalk-ap-southeast-1-452931296318"
+  bucket_path: "Complex"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  edge: true

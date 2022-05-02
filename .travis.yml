@@ -1,23 +1,27 @@
 sudo: required
+language: generic
+
 services:
   - docker
 
 before_install:
-  - docker build -t bry765/client-test -f ./client/Dockerfile.dev ./client
+  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
 
-scripts:
-  - docker run -e CI=true bry765/client-test npm test
+script:
+  - docker run -e CI=true stephengrider/react-test npm test
 
 after_success:
-  - docker build -t bry765/client ./client
-  - docker build -t bry765/worker ./worker
-  - docker build -t bry765/nginx ./nginx
-  - docker build -t bry765/server ./server
+  - docker build -t stephengrider/multi-client ./client
+  - docker build -t stephengrider/multi-nginx ./nginx
+  - docker build -t stephengrider/multi-server ./server
+  - docker build -t stephengrider/multi-worker ./worker
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push bry765/client
-  - docker push bry765/server
-  - docker push bry765/worker
-  - docker push bry765/nginx
+  # Take those images and push them to docker hub
+  - docker push stephengrider/multi-client
+  - docker push stephengrider/multi-nginx
+  - docker push stephengrider/multi-server
+  - docker push stephengrider/multi-worker
 
 deploy:
   provider: elasticbeanstalk

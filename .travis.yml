@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t azuch/client-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run -e CI=true azuch/client-test npm test
+
+after_success:
+  - docker build -t azuch/client ./client
+  - docker build -t azuch/worker ./worker
+  - docker build -t azuch/nginx ./nginx
+  - docker build -t azuch/server ./server
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push azuch/client
+  - docker push azuch/server
+  - docker push azuch/worker
+  - docker push azuch/nginx
